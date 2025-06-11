@@ -1,0 +1,102 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78",
+    "title": "Frontend Developer",
+    "description": "Responsible for building user-facing features with React, TailwindCSS, and Next.js.",
+    "min_salary_offered": 7000000,
+    "max_salary_offered": 12000000,
+    "created_at": "2025-06-01T10:00:00Z",
+    "updated_at": "2025-06-01T10:00:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8910-bc12-de45fg67hi89",
+    "title": "Backend Engineer",
+    "description": "Maintain APIs and business logic with Node.js, Express, and PostgreSQL.",
+    "min_salary_offered": 8000000,
+    "max_salary_offered": 13000000,
+    "created_at": "2025-06-02T09:30:00Z",
+    "updated_at": "2025-06-02T09:30:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9021-cd34-fe67gh89ij01",
+    "title": "Full Stack Developer",
+    "description": "Work on both frontend and backend tasks using modern JavaScript stacks.",
+    "min_salary_offered": 9000000,
+    "max_salary_offered": 15000000,
+    "created_at": "2025-06-03T08:00:00Z",
+    "updated_at": "2025-06-03T08:00:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "d4e5f6a7-b8c9-0132-de45-gh78ij90kl12",
+    "title": "DevOps Engineer",
+    "description": "Implement CI/CD pipelines, manage infrastructure with Docker and Kubernetes.",
+    "min_salary_offered": 10000000,
+    "max_salary_offered": 16000000,
+    "created_at": "2025-06-03T12:15:00Z",
+    "updated_at": "2025-06-03T12:15:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1243-ef56-hi89jk01lm23",
+    "title": "Mobile Developer",
+    "description": "Build mobile apps using Flutter and integrate with backend services.",
+    "min_salary_offered": 8500000,
+    "max_salary_offered": 14000000,
+    "created_at": "2025-06-04T07:45:00Z",
+    "updated_at": "2025-06-04T07:45:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2354-fg67-ij90kl12mn34",
+    "title": "QA Engineer",
+    "description": "Design and run test plans, perform manual and automated testing.",
+    "min_salary_offered": 6000000,
+    "max_salary_offered": 9000000,
+    "created_at": "2025-06-04T10:20:00Z",
+    "updated_at": "2025-06-04T10:20:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "a7b8c9d0-e1f2-3465-gh78-jk12lm34no45",
+    "title": "System Analyst",
+    "description": "Analyze system requirements and ensure business alignment.",
+    "min_salary_offered": 9500000,
+    "max_salary_offered": 14000000,
+    "created_at": "2025-06-04T11:10:00Z",
+    "updated_at": "2025-06-04T11:10:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "b8c9d0e1-f2g3-4576-hi89-kl12mn45op56",
+    "title": "Product Manager",
+    "description": "Define product vision, work closely with engineers and designers.",
+    "min_salary_offered": 12000000,
+    "max_salary_offered": 18000000,
+    "created_at": "2025-06-04T12:00:00Z",
+    "updated_at": "2025-06-04T12:00:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "c9d0e1f2-g3h4-5687-ij90-lm34op56qr67",
+    "title": "UI/UX Designer",
+    "description": "Create intuitive and engaging user interfaces and experiences.",
+    "min_salary_offered": 7000000,
+    "max_salary_offered": 11000000,
+    "created_at": "2025-06-04T13:30:00Z",
+    "updated_at": "2025-06-04T13:30:00Z",
+    "deleted_at": null
+  },
+  {
+    "id": "d0e1f2g3-h4i5-6798-jk12-np45qr67st78",
+    "title": "Data Engineer",
+    "description": "Design and build pipelines for data processing and analytics.",
+    "min_salary_offered": 11000000,
+    "max_salary_offered": 17000000,
+    "created_at": "2025-06-04T14:45:00Z",
+    "updated_at": "2025-06-04T14:45:00Z",
+    "deleted_at": null
+  }
+]
