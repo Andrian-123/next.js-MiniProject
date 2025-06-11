@@ -27,7 +27,7 @@
             <li><p>Dashboard Participant (View own jobs)</p></li>
         </ul>
     </li>
-    <li><p>🔔 Notifications</p></li>
+    <li><p>🔔 Jobs Application Logs</p></li>
 </ol>
 
 ---
@@ -43,4 +43,4 @@
 
 ## 🔗 Link
 
-- Production [(Here)](https://jobs.pace11.my.id 'Visit here') ↗️
+- Production (Soon) 🚀
