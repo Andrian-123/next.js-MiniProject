@@ -3,8 +3,13 @@ import { db } from '@/lib/db'
 import { jobApplicationsTable, applicantsTable } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
 import { sql } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const id = (await params).id
   try {
     const getJobApplicationsByJobId = await db.execute(sql`
       SELECT
@@ -23,7 +28,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
       FROM ${jobApplicationsTable} ja
       JOIN ${applicantsTable} a
         ON a.id = ja.applicant_id
-      WHERE ja.job_id = ${params.id}
+      WHERE ja.job_id = ${id}
     `)
     return jsonResponse({ data: getJobApplicationsByJobId.rows })
   } catch (error) {

@@ -4,13 +4,18 @@ import { jobsTable } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
 import { formJobSchema } from '@/types/form-schema'
 import { eq } from 'drizzle-orm'
+import { NextRequest } from 'next/server'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const id = (await params).id
   try {
     const getByIdJob = await db
       .select()
       .from(jobsTable)
-      .where(eq(jobsTable.id, params.id))
+      .where(eq(jobsTable.id, id))
 
     if (!getByIdJob.length) {
       return errorResponse({ message: 'Detail job not found', status: 404 })
@@ -22,11 +27,12 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const body = await req.json()
   const parse = formJobSchema.safeParse(body)
+  const id = (await params).id
 
   if (!parse.success) {
     return errorResponse({
@@ -39,7 +45,7 @@ export async function PATCH(
     const existing = await db
       .select()
       .from(jobsTable)
-      .where(eq(jobsTable.id, params.id))
+      .where(eq(jobsTable.id, id))
     if (!existing.length) {
       return errorResponse({ message: 'Detail job not found', status: 404 })
     }
@@ -54,7 +60,7 @@ export async function PATCH(
         is_open: parse.data.is_open,
         updated_at: new Date(),
       })
-      .where(eq(jobsTable.id, params.id))
+      .where(eq(jobsTable.id, id))
       .returning()
     return jsonResponse({ data: updateJob })
   } catch (error) {
@@ -63,14 +69,15 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _: Request,
-  { params }: { params: { id: string } },
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
+  const id = (await params).id
   try {
     const deleteJob = await db
       .update(jobsTable)
       .set({ deleted_at: new Date() })
-      .where(eq(jobsTable.id, params.id))
+      .where(eq(jobsTable.id, id))
       .returning()
     return jsonResponse({ data: deleteJob })
   } catch (error) {

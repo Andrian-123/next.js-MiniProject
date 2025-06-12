@@ -5,13 +5,15 @@ import { jobApplicationsTable, jobApplicationLogsTable } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
 import { eq } from 'drizzle-orm'
 import { formJobApplicationSchema } from '@/types/form-schema'
+import { NextRequest } from 'next/server'
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const body = await req.json()
   const parse = formJobApplicationSchema.safeParse(body)
+  const id = (await params).id
 
   if (!parse.success) {
     return errorResponse({
@@ -25,7 +27,7 @@ export async function PATCH(
     const existing = await db
       .select()
       .from(jobApplicationsTable)
-      .where(eq(jobApplicationsTable.id, params.id))
+      .where(eq(jobApplicationsTable.id, id))
     if (!existing.length) {
       return errorResponse({
         message: 'Job application not found',
@@ -36,7 +38,7 @@ export async function PATCH(
     const [applyJob] = await db
       .update(jobApplicationsTable)
       .set({ ...parse.data, updated_at: new Date() })
-      .where(eq(jobApplicationsTable.id, params.id))
+      .where(eq(jobApplicationsTable.id, id))
       .returning()
 
     if (!!applyJob.id) {

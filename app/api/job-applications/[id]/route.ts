@@ -7,21 +7,25 @@ import {
   jobApplicationLogsTable,
 } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, param } from 'drizzle-orm'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest } from 'next/server'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const id = (await params).id
   try {
     const [getByIdJobApplication] = await db
       .select()
       .from(jobApplicationsTable)
-      .where(eq(jobApplicationsTable.id, params.id))
+      .where(eq(jobApplicationsTable.id, id))
 
     const jobApplicationLogs = await db
       .select()
       .from(jobApplicationLogsTable)
-      .where(eq(jobApplicationLogsTable.job_application_id, params.id))
+      .where(eq(jobApplicationLogsTable.job_application_id, id))
 
     const result = {
       ...getByIdJobApplication,
@@ -35,27 +39,29 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 }
 
 export async function POST(
-  req: Request,
-  { params }: { params: { id: string } },
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  // const session = await getToken({
-  //   req: req as NextRequest,
-  //   secret: process.env.NEXTAUTH_SECRET!,
-  // })
+  const session = await getToken({
+    req: req as NextRequest,
+    secret: process.env.NEXTAUTH_SECRET!,
+  })
 
-  // if (!session) {
-  //   return errorResponse({ message: 'Unauthorized', status: 401 })
-  // }
-
-  const session = {
-    id: '88b12c71-dc7e-4709-be76-3365f5f66569',
+  if (!session) {
+    return errorResponse({ message: 'Unauthorized', status: 401 })
   }
+
+  const id = (await params).id
+
+  // const session = {
+  //   id: '88b12c71-dc7e-4709-be76-3365f5f66569',
+  // }
 
   try {
     const existing = await db
       .select()
       .from(jobsTable)
-      .where(and(eq(jobsTable.id, params.id), eq(jobsTable.is_open, true)))
+      .where(and(eq(jobsTable.id, id), eq(jobsTable.is_open, true)))
     if (!existing.length) {
       return errorResponse({ message: 'Job not found', status: 404 })
     }
@@ -64,7 +70,7 @@ export async function POST(
       .insert(jobApplicationsTable)
       .values({
         applicant_id: session.id,
-        job_id: params.id,
+        job_id: id,
       })
       .returning()
 
