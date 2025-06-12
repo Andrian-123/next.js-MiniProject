@@ -14,12 +14,30 @@ import { Button } from '@/components/ui/button'
 import useFetcher from '@/hooks/useFetcher'
 import { ApiResponse, JobType } from '@/types/common'
 import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 
 export default function HomepageJobContainer() {
   const { data } = useSession()
   const { data: jobs } = useFetcher<ApiResponse<JobType[]>>({
     path: '/jobs',
   })
+
+  const handleApplyJob = async (id: string) => {
+    try {
+      const response = await fetch(`/api/job-applications/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        toast.success('Apply job successful')
+      }
+    } catch (error) {
+      console.log('error => ', error)
+    }
+  }
 
   return (
     <div
@@ -47,7 +65,7 @@ export default function HomepageJobContainer() {
               <CardDescription>{job.description}</CardDescription>
             </CardHeader>
             <CardFooter hidden={data?.user.role === 'admin' || !job.is_open}>
-              <Button>Apply</Button>
+              <Button onClick={() => handleApplyJob(job.id)}>Apply</Button>
             </CardFooter>
           </Card>
         )) || null}

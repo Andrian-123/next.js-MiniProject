@@ -49,9 +49,20 @@ export type JobApplicationsType = {
 
 export type ApplicationsType = {
   id: string
-  application_id: string
-  job_id: string
   status: string
   created_at: string
   updated_at: string
+  job: {
+    id: string
+    title: string
+    description: string
+    min_salary_offered: number
+    max_salary_offered: number
+  }
+  status_log: {
+    id: string
+    note: string
+    status: string
+    created_at: string
+  }[]
 }

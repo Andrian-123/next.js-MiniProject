@@ -207,10 +207,32 @@ export const columnsJobApplications = (
 
 export const columnsApplications: ColumnDef<ApplicationsType>[] = [
   {
-    header: 'Status',
-    size: 200,
+    header: 'Job Title',
+    cell: ({ row }) => <p>{row.original.job.title}</p>,
+  },
+  {
+    header: 'Job Description',
+    cell: ({ row }) => <p>{row.original.job.description}</p>,
+  },
+  {
+    header: 'Job Salary Offered',
     cell: ({ row }) => (
-      <p className="whitespace-normal break-words">{row.original.status}</p>
+      <p>{`${formatRangeRupiah(
+        row.original.job.min_salary_offered,
+        row.original.job.max_salary_offered,
+      )}`}</p>
     ),
+  },
+  {
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="capitalize">
+        {String(row.original.status).replaceAll('_', ' ')}
+      </Badge>
+    ),
+  },
+  {
+    header: 'Created At',
+    cell: ({ row }) => <p>{row.original.created_at}</p>,
   },
 ]

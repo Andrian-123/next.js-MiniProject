@@ -48,7 +48,7 @@ export const applicantsTable = pgTable('applicants', {
 export const jobsTable = pgTable('jobs', {
   id: uuid('id').defaultRandom().primaryKey(),
   title: varchar({ length: 255 }).notNull(),
-  description: text('full_name').notNull(),
+  description: text('description').notNull(),
   min_salary_offered: integer('min_salary_offered').notNull(),
   max_salary_offered: integer('max_salary_offered').notNull(),
   is_open: boolean('is_open').notNull().default(true),

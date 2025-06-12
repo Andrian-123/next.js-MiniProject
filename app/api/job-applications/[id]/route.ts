@@ -5,6 +5,7 @@ import {
   jobApplicationsTable,
   jobsTable,
   jobApplicationLogsTable,
+  applicantsTable,
 } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
 import { eq, and, param } from 'drizzle-orm'
@@ -46,16 +47,11 @@ export async function POST(
     req: req as NextRequest,
     secret: process.env.NEXTAUTH_SECRET!,
   })
+  const id = (await params).id
 
   if (!session) {
     return errorResponse({ message: 'Unauthorized', status: 401 })
   }
-
-  const id = (await params).id
-
-  // const session = {
-  //   id: '88b12c71-dc7e-4709-be76-3365f5f66569',
-  // }
 
   try {
     const existing = await db
@@ -66,10 +62,15 @@ export async function POST(
       return errorResponse({ message: 'Job not found', status: 404 })
     }
 
+    const [applicant] = await db
+      .select()
+      .from(applicantsTable)
+      .where(eq(applicantsTable.user_id, session.id))
+
     const [applyJob] = await db
       .insert(jobApplicationsTable)
       .values({
-        applicant_id: session.id,
+        applicant_id: applicant.id,
         job_id: id,
       })
       .returning()
