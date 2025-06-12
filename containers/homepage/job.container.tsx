@@ -46,7 +46,7 @@ export default function HomepageJobContainer() {
               </CardDescription>
               <CardDescription>{job.description}</CardDescription>
             </CardHeader>
-            <CardFooter hidden={data?.user.role === 'admin'}>
+            <CardFooter hidden={data?.user.role === 'admin' || !job.is_open}>
               <Button>Apply</Button>
             </CardFooter>
           </Card>

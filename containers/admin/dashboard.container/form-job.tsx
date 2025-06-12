@@ -22,10 +22,12 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { z } from 'zod'
 import { defaultValueJob } from '@/constants'
 import { ValueJobType } from '@/types/common'
+import { Loader2Icon } from 'lucide-react'
+import { toast } from 'sonner'
 
 type AdminDashboardFormJobProps = {
   open: ValueJobType
@@ -41,7 +43,7 @@ export default function AdminDashboardFormJob({
   onFinish,
 }: AdminDashboardFormJobProps) {
   const formRef = useRef<HTMLFormElement>(null)
-
+  const [loading, setLoading] = useState<boolean>(false)
   const { form } = useFormAction({
     schema: formJobSchema,
     defaultValues: defaultValueJob,
@@ -53,8 +55,9 @@ export default function AdminDashboardFormJob({
   }
 
   const onSubmit = async (values: z.infer<typeof formJobSchema>) => {
+    setLoading(true)
     try {
-      await fetch(
+      const response = await fetch(
         `/api/jobs${open?.type === 'edit' ? `/${open?.data.id}` : ''}`,
         {
           method: open?.type === 'create' ? 'POST' : 'PATCH',
@@ -64,10 +67,16 @@ export default function AdminDashboardFormJob({
           body: JSON.stringify(values),
         },
       )
-      onFinish()
-      handleClose()
+
+      if (response.ok) {
+        toast.success(`${open?.type} successful`)
+        onFinish()
+        handleClose()
+      }
     } catch (error) {
       console.log('error => ', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -172,11 +181,21 @@ export default function AdminDashboardFormJob({
         </div>
         <DrawerFooter>
           <div className="flex gap-2 justify-end p-4 container w-full max-w-sm mx-auto">
-            <Button size="sm" variant="secondary" onClick={handleClose}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={handleClose}
+              disabled={loading}
+            >
               Cancel
             </Button>
-            <Button size="sm" onClick={() => onSubmitClick()}>
-              Submit
+            <Button
+              size="sm"
+              onClick={() => onSubmitClick()}
+              disabled={loading}
+            >
+              {loading && <Loader2Icon className="animate-spin" />}
+              {loading ? 'Loading' : 'Submit'}
             </Button>
           </div>
         </DrawerFooter>

@@ -9,6 +9,8 @@ import AdminDashboardFormJob from './form-job'
 import { useState } from 'react'
 import { ValueJobType } from '@/types/common'
 import { defaultValueJob } from '@/constants'
+import AdminDashboardJobApplicationsTable from './job-applications-table'
+import { toast } from 'sonner'
 
 export default function AdminDashboardJobTable() {
   const {
@@ -22,11 +24,15 @@ export default function AdminDashboardJobTable() {
     data: defaultValueJob,
     type: '',
   })
+  const [jobApplications, setJobApplications] = useState<string>('')
 
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`/api/jobs/${id}`, { method: 'DELETE' })
-      mutate()
+      const response = await fetch(`/api/jobs/${id}`, { method: 'DELETE' })
+      if (response.ok) {
+        mutate()
+        toast.success('Delete successful')
+      }
     } catch (error) {
       console.log('error => ', error)
     }
@@ -35,9 +41,15 @@ export default function AdminDashboardJobTable() {
   const handleClickAction = (value: ValueJobType) => {
     if (value?.type === 'delete') {
       handleDelete(value?.data.id)
-    } else {
-      setValueJob({ data: value.data, type: value.type })
+      return
     }
+
+    if (value?.type === 'view') {
+      setJobApplications(value?.data?.id)
+      return
+    }
+
+    setValueJob({ data: value.data, type: value.type })
   }
 
   const columns = columnsJobs(handleClickAction)
@@ -64,6 +76,10 @@ export default function AdminDashboardJobTable() {
         onFinish={() => {
           mutate()
         }}
+      />
+      <AdminDashboardJobApplicationsTable
+        open={jobApplications}
+        onOpen={() => setJobApplications('')}
       />
     </div>
   )

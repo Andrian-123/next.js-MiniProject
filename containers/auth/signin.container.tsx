@@ -129,7 +129,7 @@ export default function AuthSigninContainer() {
                         disabled={loading}
                       >
                         {loading && <Loader2Icon className="animate-spin" />}
-                        {loading ? 'loading' : 'Sign In'}
+                        {loading ? 'Loading' : 'Sign In'}
                       </Button>
                     </div>
                   </div>

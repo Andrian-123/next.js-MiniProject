@@ -45,12 +45,12 @@ export default function DataTable<T>({
     <div className="w-full">
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup, index) => (
               <TableRow key={index}>
                 {headerGroup.headers.map((header, idx) => {
                   return (
-                    <TableHead key={idx}>
+                    <TableHead key={idx} style={{ width: header.getSize() }}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -77,7 +77,10 @@ export default function DataTable<T>({
               table.getRowModel().rows.map((row, index) => (
                 <TableRow key={index}>
                   {row.getAllCells().map((cell, idx) => (
-                    <TableCell key={idx}>
+                    <TableCell
+                      key={idx}
+                      style={{ width: cell.column.getSize() }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

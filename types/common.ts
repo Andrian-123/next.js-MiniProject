@@ -29,3 +29,20 @@ export type JobType = {
   updated_at: string
   deleted_at: string
 }
+
+export type ApplicantType = {
+  id: string
+  full_name: string
+  phone: string
+  min_salary_expectation: number
+  max_salary_expectation: number
+  summary: string
+}
+
+export type JobApplicationsType = {
+  id: string
+  status: string
+  created_at: string
+  updated_at: string
+  applicant: ApplicantType
+}

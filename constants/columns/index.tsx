@@ -2,22 +2,32 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { MoreHorizontal } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
-import { JobType } from '@/types/common'
+import { JobType, JobApplicationsType } from '@/types/common'
 import { formatRangeRupiah } from '@/utils'
 import { ValueJobType } from '@/types/common'
 import { Badge } from '@/components/ui/badge'
+import { jobStatusArray } from '..'
 
 export const columnsJobs = (
   onClickAction: ({ data, type }: ValueJobType) => void,
 ): ColumnDef<JobType>[] => [
   {
     header: 'Open',
+    size: 50,
     cell: ({ row }) => (
       <Badge variant={row.original.is_open ? 'default' : 'outline'}>
         {row.original.is_open ? 'Yes' : 'No'}
@@ -32,7 +42,12 @@ export const columnsJobs = (
   {
     accessorKey: 'description',
     header: 'Description',
-    cell: ({ row }) => <p>{row.getValue('description')}</p>,
+    size: 200,
+    cell: ({ row }) => (
+      <p className="whitespace-normal break-words">
+        {row.getValue('description')}
+      </p>
+    ),
   },
   {
     header: 'Salary Offered',
@@ -46,10 +61,12 @@ export const columnsJobs = (
   {
     accessorKey: 'applicants_total',
     header: 'Applicants',
+    size: 100,
     cell: ({ row }) => <p>{row.getValue('applicants_total')}</p>,
   },
   {
     id: 'actions',
+    header: 'Actions',
     enableHiding: false,
     cell: ({ row }) => {
       return (
@@ -61,7 +78,18 @@ export const columnsJobs = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() =>
+                onClickAction({
+                  data: {
+                    id: row.original.id,
+                  },
+                  type: 'view',
+                })
+              }
+            >
+              View Applicants
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() =>
                 onClickAction({
@@ -104,5 +132,75 @@ export const columnsJobs = (
         </DropdownMenu>
       )
     },
+  },
+]
+
+export const columnsJobApplications = (
+  onClickAction: ({ id, status }: { id: string; status: string }) => void,
+): ColumnDef<JobApplicationsType>[] => [
+  {
+    header: 'Full Name',
+    cell: ({ row }) => <p>{row.original.applicant.full_name}</p>,
+  },
+  {
+    header: 'Phone',
+    cell: ({ row }) => <p>{row.original.applicant.phone}</p>,
+  },
+  {
+    header: 'Summary',
+    size: 200,
+    cell: ({ row }) => (
+      <p className="whitespace-normal break-words">
+        {row.original.applicant.summary}
+      </p>
+    ),
+  },
+  {
+    header: 'Salary Expectation',
+    cell: ({ row }) => (
+      <p>{`${formatRangeRupiah(
+        row.original.applicant.min_salary_expectation,
+        row.original.applicant.max_salary_expectation,
+      )}`}</p>
+    ),
+  },
+  {
+    header: 'Status',
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="capitalize">
+        {String(row.original.status).replaceAll('_', ' ')}
+      </Badge>
+    ),
+  },
+  {
+    id: 'actions',
+    header: 'Actions',
+    enableHiding: false,
+    cell: ({ row }) => (
+      <Select
+        value={row.original.status}
+        onValueChange={(value) =>
+          onClickAction({ id: row.original.id, status: value })
+        }
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select a status" />
+        </SelectTrigger>
+        <SelectContent className="capitalize">
+          <SelectGroup>
+            <SelectLabel>Status</SelectLabel>
+            {jobStatusArray.map((status) => (
+              <SelectItem
+                key={status}
+                value={status}
+                disabled={status === row.original.status}
+              >
+                {String(status).replaceAll('_', ' ')}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    ),
   },
 ]
