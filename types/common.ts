@@ -46,3 +46,12 @@ export type JobApplicationsType = {
   updated_at: string
   applicant: ApplicantType
 }
+
+export type ApplicationsType = {
+  id: string
+  application_id: string
+  job_id: string
+  status: string
+  created_at: string
+  updated_at: string
+}

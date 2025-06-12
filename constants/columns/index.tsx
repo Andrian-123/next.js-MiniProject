@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { MoreHorizontal } from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
-import { JobType, JobApplicationsType } from '@/types/common'
+import { JobType, JobApplicationsType, ApplicationsType } from '@/types/common'
 import { formatRangeRupiah } from '@/utils'
 import { ValueJobType } from '@/types/common'
 import { Badge } from '@/components/ui/badge'
@@ -201,6 +201,16 @@ export const columnsJobApplications = (
           </SelectGroup>
         </SelectContent>
       </Select>
+    ),
+  },
+]
+
+export const columnsApplications: ColumnDef<ApplicationsType>[] = [
+  {
+    header: 'Status',
+    size: 200,
+    cell: ({ row }) => (
+      <p className="whitespace-normal break-words">{row.original.status}</p>
     ),
   },
 ]
