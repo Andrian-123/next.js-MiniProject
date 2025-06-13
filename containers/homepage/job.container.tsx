@@ -18,7 +18,7 @@ import { toast } from 'sonner'
 
 export default function HomepageJobContainer() {
   const { data } = useSession()
-  const { data: jobs } = useFetcher<ApiResponse<JobType[]>>({
+  const { data: jobs, mutate } = useFetcher<ApiResponse<JobType[]>>({
     path: '/jobs',
   })
 
@@ -30,9 +30,13 @@ export default function HomepageJobContainer() {
           'Content-Type': 'application/json',
         },
       })
+      const data = await response.json()
 
       if (response.ok) {
+        mutate()
         toast.success('Apply job successful')
+      } else {
+        toast.error(data.message)
       }
     } catch (error) {
       console.log('error => ', error)
@@ -65,7 +69,13 @@ export default function HomepageJobContainer() {
               <CardDescription>{job.description}</CardDescription>
             </CardHeader>
             <CardFooter hidden={data?.user.role === 'admin' || !job.is_open}>
-              <Button onClick={() => handleApplyJob(job.id)}>Apply</Button>
+              <Button
+                disabled={!!job.is_applied}
+                onClick={() => handleApplyJob(job.id)}
+              >
+                {!!job.is_applied ? 'Applied' : 'Apply'}
+                {/* Apply */}
+              </Button>
             </CardFooter>
           </Card>
         )) || null}

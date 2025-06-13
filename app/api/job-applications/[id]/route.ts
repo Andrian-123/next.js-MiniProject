@@ -48,6 +48,7 @@ export async function POST(
     secret: process.env.NEXTAUTH_SECRET!,
   })
   const id = (await params).id
+  const applicantId = session?.applicant_id || ''
 
   if (!session) {
     return errorResponse({ message: 'Unauthorized', status: 401 })
@@ -60,6 +61,20 @@ export async function POST(
       .where(and(eq(jobsTable.id, id), eq(jobsTable.is_open, true)))
     if (!existing.length) {
       return errorResponse({ message: 'Job not found', status: 404 })
+    }
+
+    const duplicateJobApplications = await db
+      .select()
+      .from(jobApplicationsTable)
+      .where(
+        and(
+          eq(jobApplicationsTable.job_id, id),
+          eq(jobApplicationsTable.applicant_id, applicantId),
+        ),
+      )
+      .limit(1)
+    if (duplicateJobApplications.length) {
+      return errorResponse({ message: 'Duplicate apply job', status: 404 })
     }
 
     const [applicant] = await db
@@ -83,7 +98,7 @@ export async function POST(
       })
     }
 
-    return jsonResponse({ data: applyJob })
+    return jsonResponse({ data: duplicateJobApplications })
   } catch (error) {
     return errorResponse({ message: 'Failed to apply job' })
   }

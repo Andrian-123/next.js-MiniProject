@@ -24,6 +24,7 @@ export type JobType = {
   min_salary_offered: number
   max_salary_offered: number
   is_open: boolean
+  is_applied: boolean
   applicants_total: string
   created_at: string
   updated_at: string
@@ -65,4 +66,17 @@ export type ApplicationsType = {
     status: string
     created_at: string
   }[]
+}
+
+export type BaseUserType = {
+  id: string
+  email: string
+  password: string
+  role: 'admin' | 'applicant'
+  created_at: Date | null
+  updated_at: Date | null
+}
+
+export type UserType = BaseUserType & {
+  applicant_id?: string
 }
