@@ -48,7 +48,7 @@ export default function HomepageJobContainer() {
       className="container mx-auto flex justify-around items-center flex-col py-14"
       id="jobs"
     >
-      <h1 className="text-4xl font-semibold tracking-wider uppercase">Jobs</h1>
+      <h1 className="text-3xl font-semibold tracking-wider uppercase">Jobs</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 w-full">
         {jobs?.data?.map((job, index) => (
           <Card key={String(index)} className="w-full max-w-sm">

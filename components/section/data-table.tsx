@@ -43,7 +43,7 @@ export default function DataTable<T>({
 
   return (
     <div className="w-full">
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-hidden">
         <Table>
           <TableHeader className="bg-muted">
             {table.getHeaderGroups().map((headerGroup, index) => (

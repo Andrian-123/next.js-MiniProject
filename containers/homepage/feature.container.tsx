@@ -4,15 +4,19 @@ import { ThumbsUp, MonitorCheck, ChartNoAxesCombined } from 'lucide-react'
 export default function HomepageFeatureContainer() {
   return (
     <div className="container mx-auto flex justify-around items-center flex-col py-14">
-      <h1 className="text-4xl font-semibold tracking-wider uppercase">
+      <p className="text-3xl font-semibold tracking-wider uppercase">
         Features
-      </h1>
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mt-10">
         <Card>
           <div className="flex justify-center items-center flex-col p-6">
             <ThumbsUp size={48} strokeWidth={1.5} />
             <p className="text-md md:text-xl mt-2 font-semibold text-center">
               Simplicity
+            </p>
+            <p className="mt-4">
+              Designed with clarity in mind, our application keeps things
+              simple.
             </p>
           </div>
         </Card>
@@ -22,6 +26,9 @@ export default function HomepageFeatureContainer() {
             <p className="text-md md:text-xl mt-2 font-semibold text-center">
               Dashboard Management
             </p>
+            <p className="mt-4">
+              Take control with a powerful, centralized dashboard.
+            </p>
           </div>
         </Card>
         <Card>
@@ -29,6 +36,9 @@ export default function HomepageFeatureContainer() {
             <ChartNoAxesCombined size={48} strokeWidth={1.5} />
             <p className="text-md md:text-xl mt-2 font-semibold text-center">
               Easy Tracking
+            </p>
+            <p className="mt-4">
+              Stay updated with real-time insights and progress tracking.
             </p>
           </div>
         </Card>

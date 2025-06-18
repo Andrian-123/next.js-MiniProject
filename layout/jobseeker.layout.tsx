@@ -3,6 +3,7 @@
 import { SessionProvider } from 'next-auth/react'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import MenuDashboard from '@/components/section/menu-dashboard'
+import MotionContainer from '@/containers/motion.container'
 import { Gauge } from 'lucide-react'
 import React from 'react'
 
@@ -20,10 +21,12 @@ export default function JobSeekerDashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <SessionProvider>
-      <SidebarProvider>
-        <MenuDashboard items={menuItems}>{children}</MenuDashboard>
-      </SidebarProvider>
-    </SessionProvider>
+    <MotionContainer>
+      <SessionProvider>
+        <SidebarProvider>
+          <MenuDashboard items={menuItems}>{children}</MenuDashboard>
+        </SidebarProvider>
+      </SessionProvider>
+    </MotionContainer>
   )
 }

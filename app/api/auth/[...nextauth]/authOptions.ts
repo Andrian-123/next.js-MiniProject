@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -7,6 +8,7 @@ import bcrypt from 'bcryptjs'
 import { eq } from 'drizzle-orm'
 import jwt from 'jsonwebtoken'
 import { UserType } from '@/types/common'
+import { RequestInternal } from 'next-auth'
 
 const MAX_AGE = 60 * 60 * 24
 
@@ -22,7 +24,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<UserType & { token: string }> {
         const user = (await db
           .select()
           .from(usersTable)

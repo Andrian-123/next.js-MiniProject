@@ -5,6 +5,7 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import MenuDashboard from '@/components/section/menu-dashboard'
 import { Gauge } from 'lucide-react'
 import React from 'react'
+import MotionContainer from '@/containers/motion.container'
 
 const menuItems = [
   {
@@ -20,10 +21,12 @@ export default function AdminDashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <SessionProvider>
-      <SidebarProvider>
-        <MenuDashboard items={menuItems}>{children}</MenuDashboard>
-      </SidebarProvider>
-    </SessionProvider>
+    <MotionContainer>
+      <SessionProvider>
+        <SidebarProvider>
+          <MenuDashboard items={menuItems}>{children}</MenuDashboard>
+        </SidebarProvider>
+      </SessionProvider>
+    </MotionContainer>
   )
 }

@@ -2,6 +2,7 @@
 
 import { SessionProvider } from 'next-auth/react'
 import NavbarMenu from '@/components/section/navbar-menu'
+import MotionContainer from '@/containers/motion.container'
 
 export default function HomepageLayout({
   children,
@@ -9,11 +10,13 @@ export default function HomepageLayout({
   children: React.ReactNode
 }) {
   return (
-    <SessionProvider>
-      <div className="flex flex-col min-h-screen">
-        <NavbarMenu />
-        <main className="p-4">{children}</main>
-      </div>
-    </SessionProvider>
+    <MotionContainer>
+      <SessionProvider>
+        <div className="flex flex-col min-h-screen">
+          <NavbarMenu />
+          <main className="p-4">{children}</main>
+        </div>
+      </SessionProvider>
+    </MotionContainer>
   )
 }

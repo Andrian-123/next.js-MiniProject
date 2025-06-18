@@ -28,9 +28,13 @@ export default function NavbarMenu() {
     data?.user.role === 'admin' ? '/dashboard' : '/job-seeker'
 
   return (
-    <header className="bg-gray-950 text-white sticky top-0">
+    <header className="bg-primary text-white sticky top-0">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <Link href="#" target="_top" className="flex font-semibold">
+        <Link
+          href="#"
+          target="_top"
+          className="flex font-semibold bg-white text-gray-700 p-2 rounded-xl"
+        >
           <BriefcaseBusiness className="mr-2" />
           JOB SEEKER
         </Link>
@@ -50,7 +54,9 @@ export default function NavbarMenu() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-gray-400">
+                Account
+              </DropdownMenuLabel>
               <DropdownMenuGroup>
                 <DropdownMenuItem>{data.user.email}</DropdownMenuItem>
                 <Link href={dashboardUrl}>
