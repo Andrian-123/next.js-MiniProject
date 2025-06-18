@@ -5,6 +5,7 @@ CREATE TABLE "applicants" (
 	"user_id" uuid,
 	"full_name" text NOT NULL,
 	"phone" varchar(13) NOT NULL,
+	"socials" jsonb,
 	"min_salary_expectation" integer NOT NULL,
 	"max_salary_expectation" integer NOT NULL,
 	"summary" text NOT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE "job_applications" (
 CREATE TABLE "jobs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" varchar(255) NOT NULL,
-	"full_name" text NOT NULL,
+	"description" text NOT NULL,
 	"min_salary_offered" integer NOT NULL,
 	"max_salary_offered" integer NOT NULL,
 	"is_open" boolean DEFAULT true NOT NULL,

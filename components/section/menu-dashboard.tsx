@@ -117,8 +117,7 @@ export default function MenuDashboard({
                     variant="destructive"
                     onClick={() =>
                       signOut({
-                        callbackUrl:
-                          process.env.NEXT_PUBLIC_LOGOUT_REDIRECT_URL,
+                        callbackUrl: process.env.NEXT_PUBLIC_URL_DOMAIN,
                       })
                     }
                   >

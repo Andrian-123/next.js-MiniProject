@@ -10,11 +10,7 @@ export default function useFetcher<T = any>({
   path?: string
 }) {
   const { data, isLoading, isValidating, mutate } = useSWR<T>(
-    [
-      enabled
-        ? `${process.env.NEXT_PUBLIC_LOGOUT_REDIRECT_URL}/api${path}`
-        : '',
-    ],
+    [enabled ? `${process.env.NEXT_PUBLIC_URL_DOMAIN}/api${path}` : ''],
     ([url]) => fetcher(url),
     { revalidateOnFocus: true },
   )

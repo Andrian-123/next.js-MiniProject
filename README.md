@@ -21,10 +21,10 @@
         <p>✅ User Authentication (Next-Auth)</p>
     </li>
     <li>
-        <p>👤 Roles (Admin & Participant)</p>
+        <p>👤 Roles (Admin & Applicant)</p>
         <ul>
             <li><p>Dashboard Admin (Management and Listing Jobs)</p></li>
-            <li><p>Dashboard Participant (View own jobs)</p></li>
+            <li><p>Dashboard Applicant (View own jobs)</p></li>
         </ul>
     </li>
     <li><p>🔔 Jobs Application Logs</p></li>

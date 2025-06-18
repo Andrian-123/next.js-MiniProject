@@ -6,6 +6,7 @@ import {
   uuid,
   integer,
   pgEnum,
+  jsonb,
   boolean,
 } from 'drizzle-orm/pg-core'
 
@@ -38,6 +39,7 @@ export const applicantsTable = pgTable('applicants', {
   }),
   full_name: text('full_name').notNull(),
   phone: varchar({ length: 13 }).notNull(),
+  socials: jsonb('socials'),
   min_salary_expectation: integer('min_salary_expectation').notNull(),
   max_salary_expectation: integer('max_salary_expectation').notNull(),
   summary: text('summary').notNull(),
