@@ -22,7 +22,7 @@ export default function AdminDashboardJobApplicationsTable({
     mutate,
   } = useFetcher<ApiResponse<JobApplicationsType[]>>({
     enabled: !!open,
-    path: !!open ? `/jobs/${open}/job-applications` : '',
+    path: !!open ? `/jobs/${open}/applicants` : '',
   })
 
   const handleClickAction = async ({

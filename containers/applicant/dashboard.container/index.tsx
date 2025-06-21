@@ -1,8 +1,8 @@
 import CardReports from '@/components/section/card-reports'
 import { Separator } from '@/components/ui/separator'
-import JobSeekerApplicationsTable from './applications-table'
+import ApplicationsTable from './applications-table'
 
-export default function JobSeekerDashboardContainer() {
+export default function ApplicantDashboardContainer() {
   return (
     <div className="@container/main flex flex-1 flex-col gap-2">
       <div className="flex flex-col gap-4">
@@ -10,7 +10,7 @@ export default function JobSeekerDashboardContainer() {
           items={[{ title: 'Job', value: 5, description: 'Jobs Opening' }]}
         />
         <Separator />
-        <JobSeekerApplicationsTable />
+        <ApplicationsTable />
       </div>
     </div>
   )

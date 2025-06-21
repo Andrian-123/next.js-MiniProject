@@ -7,20 +7,23 @@ import { eq } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
 export async function GET(
-  _: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const id = (await params).id
   try {
-    const getByIdJob = await db
+    // query detail job
+    const [existing] = await db
       .select()
       .from(jobsTable)
       .where(eq(jobsTable.id, id))
 
-    if (!getByIdJob.length) {
+    // if detail job not found
+    if (!existing.id) {
       return errorResponse({ message: 'Detail job not found', status: 404 })
     }
-    return jsonResponse({ data: getByIdJob[0] })
+
+    return jsonResponse({ data: existing })
   } catch (error) {
     return errorResponse({ message: 'Failed to get detail job' })
   }
@@ -42,14 +45,6 @@ export async function PATCH(
   }
 
   try {
-    const existing = await db
-      .select()
-      .from(jobsTable)
-      .where(eq(jobsTable.id, id))
-    if (!existing.length) {
-      return errorResponse({ message: 'Detail job not found', status: 404 })
-    }
-
     const updateJob = await db
       .update(jobsTable)
       .set({
@@ -62,6 +57,12 @@ export async function PATCH(
       })
       .where(eq(jobsTable.id, id))
       .returning()
+
+    // if data not found
+    if (updateJob.length === 0) {
+      return errorResponse({ message: 'Detail job not found', status: 404 })
+    }
+
     return jsonResponse({ data: updateJob })
   } catch (error) {
     return errorResponse({ message: 'Failed to update job' })
@@ -69,7 +70,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const id = (await params).id
@@ -79,6 +80,12 @@ export async function DELETE(
       .set({ deleted_at: new Date() })
       .where(eq(jobsTable.id, id))
       .returning()
+
+    // if data not found
+    if (deleteJob.length === 0) {
+      return errorResponse({ message: 'Detail job not found', status: 404 })
+    }
+
     return jsonResponse({ data: deleteJob })
   } catch (error) {
     return errorResponse({ message: 'Failed to delete job' })

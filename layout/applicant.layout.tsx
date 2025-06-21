@@ -10,12 +10,12 @@ import React from 'react'
 const menuItems = [
   {
     title: 'Dashboard',
-    url: '/job-seeker',
+    url: '/applicant',
     icon: Gauge,
   },
 ]
 
-export default function JobSeekerDashboardLayout({
+export default function ApplicantLayout({
   children,
 }: {
   children: React.ReactNode

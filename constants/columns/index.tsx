@@ -14,13 +14,21 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { MoreHorizontal } from 'lucide-react'
+import {
+  MoreHorizontal,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Paperclip,
+} from 'lucide-react'
 import { ColumnDef } from '@tanstack/react-table'
 import { JobType, JobApplicationsType, ApplicationsType } from '@/types/common'
 import { formatRangeRupiah } from '@/utils'
 import { ValueJobType } from '@/types/common'
 import { Badge } from '@/components/ui/badge'
 import { jobStatusArray } from '..'
+import { format } from 'date-fns'
+import { formatLocal } from '@/lib/date'
 
 export const columnsJobs = (
   onClickAction: ({ data, type }: ValueJobType) => void,
@@ -30,6 +38,7 @@ export const columnsJobs = (
     size: 50,
     cell: ({ row }) => (
       <Badge variant={row.original.is_open ? 'default' : 'outline'}>
+        {row.original.is_open ? <CheckCircle2 /> : <XCircle />}{' '}
         {row.original.is_open ? 'Yes' : 'No'}
       </Badge>
     ),
@@ -224,15 +233,51 @@ export const columnsApplications: ColumnDef<ApplicationsType>[] = [
     ),
   },
   {
+    header: 'Applied At',
+    cell: ({ row }) => (
+      <p>{format(formatLocal(row.original.created_at), 'dd MMM yyyy hh:mm')}</p>
+    ),
+  },
+  {
     header: 'Status',
     cell: ({ row }) => (
-      <Badge variant="secondary" className="capitalize">
+      <Badge className="capitalize">
         {String(row.original.status).replaceAll('_', ' ')}
       </Badge>
     ),
   },
   {
-    header: 'Created At',
-    cell: ({ row }) => <p>{row.original.created_at}</p>,
+    header: 'Logs',
+    cell: ({ row }) => (
+      <div>
+        <ul className="list-disc space-y-2">
+          {row.original.status_log.map((log, index) => (
+            <li key={String(index)}>
+              <p>
+                <Badge
+                  variant={
+                    row.original.status_log.length - 1 === index
+                      ? 'default'
+                      : 'secondary'
+                  }
+                  className="capitalize"
+                >
+                  {String(log.status).replaceAll('_', ' ')}
+                </Badge>{' '}
+                <small className="flex items-center gap-1">
+                  <Clock size="10" />
+                  {format(formatLocal(log.created_at), 'dd MMM yyyy kk:mm')}
+                </small>
+                <small className="flex items-center gap-1">
+                  <Paperclip size="10" />
+                  {log.note}
+                </small>
+              </p>
+              <p></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ),
   },
 ]

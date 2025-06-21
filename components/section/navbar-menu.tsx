@@ -24,8 +24,7 @@ import { useSession, signOut } from 'next-auth/react'
 
 export default function NavbarMenu() {
   const { data, status } = useSession()
-  const dashboardUrl =
-    data?.user.role === 'admin' ? '/dashboard' : '/job-seeker'
+  const dashboardUrl = data?.user.role === 'admin' ? '/dashboard' : '/applicant'
 
   return (
     <header className="bg-primary text-white sticky top-0">

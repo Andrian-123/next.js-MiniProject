@@ -15,7 +15,7 @@ const menuItems = [
   },
 ]
 
-export default function AdminDashboardLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode

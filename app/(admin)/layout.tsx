@@ -1,6 +1,6 @@
 import { Toaster } from '@/components/ui/sonner'
 import type { Metadata } from 'next'
-import AdminDashboardLayout from '@/layout/dashboard.layout'
+import AdminLayout from '@/layout/admin.layout'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '../globals.css'
 
@@ -29,10 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AdminDashboardLayout>
+        <AdminLayout>
           {children}
           <Toaster richColors position="top-center" />
-        </AdminDashboardLayout>
+        </AdminLayout>
       </body>
     </html>
   )

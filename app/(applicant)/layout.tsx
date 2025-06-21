@@ -1,4 +1,4 @@
-import JobSeekerDashboardLayout from '@/layout/jobseeker.layout'
+import ApplicantLayout from '@/layout/applicant.layout'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '../globals.css'
@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <JobSeekerDashboardLayout>{children}</JobSeekerDashboardLayout>
+        <ApplicantLayout>{children}</ApplicantLayout>
       </body>
     </html>
   )

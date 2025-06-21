@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL('/dashboard', req.url))
     }
     if (session.role === 'applicant') {
-      return NextResponse.redirect(new URL('/job-seeker', req.url))
+      return NextResponse.redirect(new URL('/applicant', req.url))
     }
   }
 
@@ -23,8 +23,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  // checking if user can access /job-seeker only applicant
-  if (pathname.startsWith('/job-seeker') && session?.role !== 'applicant') {
+  // checking if user can access /applicant only applicant
+  if (pathname.startsWith('/applicant') && session?.role !== 'applicant') {
     return NextResponse.redirect(new URL('/', req.url))
   }
 

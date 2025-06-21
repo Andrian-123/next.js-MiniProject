@@ -9,8 +9,8 @@ CREATE TABLE "applicants" (
 	"min_salary_expectation" integer NOT NULL,
 	"max_salary_expectation" integer NOT NULL,
 	"summary" text NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "job_application_logs" (
@@ -18,7 +18,7 @@ CREATE TABLE "job_application_logs" (
 	"job_application_id" uuid,
 	"status" "job_application_status" NOT NULL,
 	"note" text NOT NULL,
-	"created_at" timestamp DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "job_applications" (
@@ -26,8 +26,8 @@ CREATE TABLE "job_applications" (
 	"applicant_id" uuid,
 	"job_id" uuid,
 	"status" "job_application_status" DEFAULT 'in_progress' NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE "jobs" (
@@ -37,8 +37,8 @@ CREATE TABLE "jobs" (
 	"min_salary_offered" integer NOT NULL,
 	"max_salary_offered" integer NOT NULL,
 	"is_open" boolean DEFAULT true NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now(),
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now(),
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
@@ -47,8 +47,8 @@ CREATE TABLE "users" (
 	"email" varchar(100) NOT NULL,
 	"password" text NOT NULL,
 	"role" "user_role" DEFAULT 'applicant' NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
+	"created_at" timestamp with time zone DEFAULT now(),
+	"updated_at" timestamp with time zone DEFAULT now()
 );
 --> statement-breakpoint
 ALTER TABLE "applicants" ADD CONSTRAINT "applicants_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint

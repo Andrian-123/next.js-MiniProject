@@ -3,7 +3,8 @@ import { db } from '@/lib/db'
 import { jobsTable, jobApplicationsTable } from '@/lib/db/schema'
 import { errorResponse, jsonResponse } from '@/utils'
 import { formJobSchema } from '@/types/form-schema'
-import { sql } from 'drizzle-orm'
+import { sql, eq, and, isNull, desc, isNotNull } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { getToken } from 'next-auth/jwt'
 import { NextRequest } from 'next/server'
 
@@ -12,58 +13,53 @@ export async function GET(req: NextRequest) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   })
-  const applicantId = session?.applicant_id || ''
-  const queryApplicant = sql`
-      SELECT
-        ${jobsTable.id} as id,
-        ${jobsTable.title} as title,
-        ${jobsTable.description} as description,
-        ${jobsTable.min_salary_offered} as min_salary_offered,
-        ${jobsTable.max_salary_offered} as max_salary_offered,
-        ${jobsTable.is_open} as is_open,
-        ${jobsTable.created_at} as created_at,
-        ${jobsTable.updated_at} as updated_at,
-        ${jobsTable.deleted_at} as deleted_at,
-        (
-          SELECT COUNT(*) FROM ${jobApplicationsTable}
-          WHERE ${jobApplicationsTable.job_id} = ${jobsTable.id}
-        ) AS applicants_total,
-        (
-          SELECT EXISTS (
-           SELECT 1 from ${jobApplicationsTable}
-           WHERE ${jobApplicationsTable.job_id} = ${jobsTable.id}
-           AND ${jobApplicationsTable.applicant_id} = ${applicantId}
-          )
-        ) AS is_applied
-      FROM ${jobsTable}
-      WHERE ${jobsTable.deleted_at} IS NULL
-      ORDER BY ${jobsTable.updated_at} DESC
-    `
-  const queryAdmin = sql`
-      SELECT
-        ${jobsTable.id} as id,
-        ${jobsTable.title} as title,
-        ${jobsTable.description} as description,
-        ${jobsTable.min_salary_offered} as min_salary_offered,
-        ${jobsTable.max_salary_offered} as max_salary_offered,
-        ${jobsTable.is_open} as is_open,
-        ${jobsTable.created_at} as created_at,
-        ${jobsTable.updated_at} as updated_at,
-        ${jobsTable.deleted_at} as deleted_at,
-        (
-          SELECT COUNT(*) FROM ${jobApplicationsTable}
-          WHERE ${jobApplicationsTable.job_id} = ${jobsTable.id}
-        ) AS applicants_total
-      FROM ${jobsTable}
-      WHERE ${jobsTable.deleted_at} IS NULL
-      ORDER BY ${jobsTable.updated_at} DESC
-    `
+  const applicantId = session?.applicant_id || null
+
+  // alias
+  const jaAllAlias = alias(jobApplicationsTable, 'ja_all_alias')
+  const jaMeAlias = alias(jobApplicationsTable, 'ja_me_alias')
 
   try {
-    const result = await db.execute(applicantId ? queryApplicant : queryAdmin)
-    return jsonResponse({ data: result.rows })
+    const baseQuery = db
+      .select({
+        id: jobsTable.id,
+        title: jobsTable.title,
+        description: jobsTable.description,
+        min_salary_offered: jobsTable.min_salary_offered,
+        max_salary_offered: jobsTable.max_salary_offered,
+        is_open: jobsTable.is_open,
+        created_at: jobsTable.created_at,
+        updated_at: jobsTable.updated_at,
+        deleted_at: jobsTable.deleted_at,
+        applicants_total: sql<number>`COUNT(${jaAllAlias.id})`.as(
+          'applicants_total',
+        ),
+        is_applied: applicantId
+          ? sql<boolean>`bool_or(${jaMeAlias}.applicant_id IS NOT NULL)`.as(
+              'is_applied',
+            )
+          : sql<object>`false`.as('is_applied'),
+      })
+      .from(jobsTable)
+      .leftJoin(jaAllAlias, eq(jaAllAlias.job_id, jobsTable.id))
+      .where(isNull(jobsTable.deleted_at))
+      .groupBy(jobsTable.id)
+      .orderBy(desc(jobsTable.updated_at))
+
+    if (applicantId) {
+      baseQuery.leftJoin(
+        jaMeAlias,
+        and(
+          eq(jaMeAlias.job_id, jobsTable.id),
+          eq(jaMeAlias.applicant_id, applicantId),
+        ),
+      )
+    }
+
+    const result = await baseQuery
+
+    return jsonResponse({ data: result })
   } catch (error) {
-    console.log('error => ', error)
     return errorResponse({ message: 'Failed to fetch jobs' })
   }
 }
@@ -91,6 +87,7 @@ export async function POST(req: Request) {
         is_open: true,
       })
       .returning()
+
     return jsonResponse({ data: newJob })
   } catch (error) {
     return errorResponse({ message: 'Failed to create job' })
