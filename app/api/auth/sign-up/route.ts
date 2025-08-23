@@ -62,6 +62,7 @@ export async function POST(req: Request) {
 
     return jsonResponse({ data: result })
   } catch (error) {
+    console.error(error)
     return errorResponse({ message: 'Failed to sign up data' })
   }
 }
