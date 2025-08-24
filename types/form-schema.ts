@@ -22,3 +22,13 @@ export const formSignupSchema = z.object({
 export const formJobApplicationSchema = z.object({
   status: z.enum(jobStatusArray),
 })
+
+export const formProfileSchema = z.object({
+  full_name: z.string().min(3),
+  phone: z.string().min(10),
+  summary: z.string().min(10),
+  min_salary_expectation: z.string().min(1),
+  max_salary_expectation: z.string().min(1),
+  email: z.string().email(),
+  password: z.string().min(5),
+})
